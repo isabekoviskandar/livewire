@@ -53,4 +53,9 @@ class TestComponent extends Component
                 break;
         }
     }
+
+    public function talaba()
+    {
+        return redirect('/talaba');
+    }
 }

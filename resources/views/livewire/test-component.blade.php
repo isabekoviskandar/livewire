@@ -13,6 +13,8 @@
 
         <button wire:click="hisob">Calculate</button>
 
+
+        <a href="#" wire:click="talaba" class="btn btn-primary">Talaba</a>
         <h2>Result: {{ $total }}</h2>
     </div>
 </div>

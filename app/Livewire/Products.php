@@ -8,12 +8,24 @@ use Livewire\Component;
 class Products extends Component
 {
     public $name, $price, $productId;
-    public $products;
+    public $searchName = ''; // For name search
+    public $searchPrice = ''; // For price search
     public $isEditing = false;
+    public $products = []; 
+
+    public function mount()
+    {
+        $this->all();
+    }
+
+    public function all(){
+        $this->products = Product::all();
+
+        return $this->products;
+    }
 
     public function render()
     {
-        $this->products = Product::all();
         return view('livewire.products');
     }
 
@@ -30,12 +42,13 @@ class Products extends Component
         ]);
 
         $this->reset(['name', 'price']);
+        $this->fetchProducts(); 
     }
 
     public function edit($id)
     {
         $product = Product::findOrFail($id);
-        $this->productId = $product->id; // Correct property
+        $this->productId = $product->id;
         $this->name = $product->name;
         $this->price = $product->price;
         $this->isEditing = true;
@@ -55,10 +68,25 @@ class Products extends Component
         ]);
 
         $this->reset(['name', 'price', 'productId']);
+        $this->isEditing = false;
     }
 
     public function delete($id)
     {
         Product::findOrFail($id)->delete();
+    }
+
+    public function cancel()
+    {
+        $this->reset(['name', 'price', 'productId']);
+        $this->isEditing = false;
+    }
+
+    public function search()
+    {
+        // dd(12);
+        $this->products = Product::where('name', 'like', $this->searchName . '%')
+        ->where('price', 'like', $this->searchPrice . '%')
+        ->get();
     }
 }
